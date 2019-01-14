@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>#{reservationController.propriete.nom}</title>
+        <link href="../resources/css/default.css" rel="stylesheet" type="text/css" />
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"/>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous"/>
+        <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
+        <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>-->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    </h:head>
+    <h:body style="background-image: url(http://silviahartmann.com/background-tile-art/images/grey-repeating-background-5.jpg);
+            background-repeat: repeat;">
+        <f:metadata>
+            <f:viewAction action="#{utilisateurController.checkLogin()}" />
+        </f:metadata>
+        <ui:include src="/profile/menu.xhtml" />
+        <div class="container">
+            <div id="demo" class="carousel slide" data-ride="carousel">
+                <ul class="carousel-indicators">
+                    <ui:repeat value="#{reservationController.propriete.proprieteAssetss}" var="image" varStatus="imageIndex">
+                        <li data-target="#demo" data-slide-to="#{imageIndex.index}" class="#{imageIndex.index == 0 ? 'active':''}"></li>
+                    </ui:repeat>
+                </ul>
+                <div class="carousel-inner">
+                    <ui:repeat value="#{reservationController.propriete.proprieteAssetss}" var="image" varStatus="imageIndex">
+                        <div class="carousel-item #{imageIndex.index == 0 ? 'active':''}">
+                            <img src="#{reservationController.getAssetUrl(image.asset.url)}" style="width: 100%;height: 450px;" class="img-thumbnail"/>
+                            <div class="carousel-caption">
+                                <h3>#{reservationController.propriete.nom}</h3>
+                            </div>   
+                        </div>
+                    </ui:repeat>
+                </div>
+                <a class="carousel-control-prev" href="#demo" data-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </a>
+                <a class="carousel-control-next" href="#demo" data-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </a>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-4">
+                    <h:form id="form1">
+                        <div class="card">
+                            <div class="card-header">
+                                Saisir vos critères:
+                            </div>
+                            <div class="card-body">
+                                <h:panelGrid style="width:100%;">
+                                    De:
+                                    <p:calendar mindate="#{reservationController.today}" id="date_debut" class="form-control" value="#{reservationController.selected.dateDebut}" 
+                                                showOn="button"/>
+                                    A  :
+                                    <p:calendar mindate="#{reservationController.today}" id="date_fin" class="form-control" value="#{reservationController.selected.dateFin}" 
+                                                showOn="button"/>
+                                    Nombre d'adultes:
+                                    <p:inputText class="form-control" type="number" value="#{reservationController.selected.nombreAdultes}"/>
+                                    Nombre d'enfants:
+                                    <p:inputText class="form-control" type="number" value="#{reservationController.selected.nombreEnfants}"/>
+                                    <p:commandButton actionListener="#{reservationController.testerCriteres()}" 
+                                                     update="alert-erreur, dialogue"
+                                                     class="btn btn-success float-right m-2" value="Valider"/>
+                                </h:panelGrid>
+                            </div>
+                            <h:panelGroup id="alert-erreur" layout="block">
+                                <div class="alert alert-danger" role="alert" 
+                                     style="display: #{reservationController.error == null?'none':'auto'};">
+                                    #{reservationController.error}
+                                </div>
+                            </h:panelGroup>
+                        </div>
+                    </h:form>
+                </div>
+                <div class="ui-g-8">
+                    <div class="card">
+                        <div class="card-header">
+                            Caractéristiques de la villa:
+                        </div>
+                        <div class="card-body h6">
+                            <ul class="list-group">
+                                <li class="list-group-item"><i class="fas fa-home"></i> #{reservationController.propriete.nom}</li>
+                                <li class="list-group-item"><i class="fas fa-info"></i> #{reservationController.propriete.apropos}</li>
+                                <li class="list-group-item"><i class="fas fa-map-marker-alt"></i> #{reservationController.propriete.ville.titre}, #{reservationController.propriete.pays.nom}.</li>
+                                <li class="list-group-item"><i class="fas fa-users"></i> #{reservationController.propriete.maximumAdultes} adultes et #{reservationController.propriete.maximumEnfants} enfants.</li>
+                                <li class="list-group-item"><i class="fas fa-building"></i> #{reservationController.propriete.nombreSallons} sallons, #{reservationController.propriete.nombreChambreACoucher} chambres à coucher et #{reservationController.propriete.nombreChambreDeBain} chambres de bain.</li>
+                                <li class="list-group-item"><i class="fas fa-smoking"></i> #{reservationController.propriete.fumee ? 'Oui':'Non'}</li>
+                                <li class="list-group-item"><i class="fas fa-dollar-sign"></i> #{reservationController.propriete.prix} dhs.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p:dialog header="Paiement" widgetVar="dlg1" minHeight="200" style='width: 400px;' id="dialogue" visible="#{reservationController.test}">
+                <h:form>
+                    Prix total:
+                    <p:inputText value="#{reservationController.selected.prixTotal}" class="form-control" disabled="false" />
+                    Votre RIB:
+                    <p:inputText value="#{reservationController.rib}" class="form-control" />
+                    Date de validité:
+                    <p:calendar value='#{reservationController.dateValidite}' showOn='button' class="form-control"/>
+                    <p:commandButton value='Paier' class="btn btn-success btn-sm float-right m-2" action='#{reservationController.paiement()}'/>
+                </h:form>
+            </p:dialog>
+        </div>
+    </h:body>
+</html>
+

@@ -1,0 +1,147 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>Votre Profile</title>
+        <link href="../resources/css/default.css" rel="stylesheet" type="text/css" />
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"/>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous"/>
+    </h:head>
+    <h:body style="background-image: url(http://silviahartmann.com/background-tile-art/images/grey-repeating-background-5.jpg);
+            background-repeat: repeat;">
+        <f:metadata>
+            <f:viewAction action="#{utilisateurController.checkLogin()}" />
+        </f:metadata>
+        <ui:include src="/profile/menu.xhtml" />
+        <div class="ui-g">
+            <div class="ui-g-4">
+                <p:panelGrid columns="2">
+                    <f:facet name="header">
+                        <img src="#{utilisateurController.utilisateurInscre.asset.url == null ?'http://amediarts.com/wp-content/uploads/2015/12/user-avatar.png':utilisateurController.getAssetUrl()}" 
+                             width="80" height="80" style="border-radius: 100%;" />
+                    </f:facet>
+
+                    <h:outputText class="fas fa-user-circle" value=" Nom" />
+                    <h:outputText value="#{utilisateurController.utilisateurInscre.nom}" />
+                    <h:outputText class="fas fa-user-circle" value=" Prenom" />
+                    <h:outputText value="#{utilisateurController.utilisateurInscre.prenom}" />
+                    <h:outputText class="fas fa-envelope-square" value=" Email" />
+                    <h:outputText value="#{utilisateurController.utilisateurInscre.email}" />
+                    <h:outputText class="fas fa-user-circle" value=" Username" />
+                    <h:outputText value="#{utilisateurController.utilisateurInscre.nomUtilisateur}" />
+                    <h:outputText class="fas fa-mobile" value=" Telephone" />
+                    <h:outputText value="#{utilisateurController.utilisateurInscre.phone}" />
+                    <h:outputText class="fas fa-address-reservationd" value=" Adresse" />
+                    <h:outputText value="#{utilisateurController.utilisateurInscre.adresse}" />
+                    <h:outputText class="fas fa-sort-numeric-up" value=" Reservations" />
+                    <h:outputText value="#{utilisateurController.utilisateurInscre.reservations.size()}" />
+                    <h:outputText class="fas fa-sort-numeric-up" value=" Propriétés" />
+                    <h:outputText value="#{utilisateurController.utilisateurInscre.proprietes.size()}" />
+                    <h:outputText class="fas fa-user-circle" value=" Genre" />
+                    <h:outputText value="#{utilisateurController.utilisateurInscre.genre == 1 ? 'Femme' : 'Homme'}" />
+                    <h:outputText class="fas fa-globe-europe" value=" Nationalité" />
+                    <h:outputText value="#{utilisateurController.utilisateurInscre.nationalite}" />
+                    <h:outputText class="fas fa-flag" value=" Pays" />
+                    <h:outputText value="#{utilisateurController.utilisateurInscre.pays.nom}" />
+                    <h:outputText class="fas fa-city" value=" Ville" />
+                    <h:outputText value="#{utilisateurController.utilisateurInscre.ville.titre}" />
+                    <h:outputText class="fas fa-info" value=" A propos" />
+                    <h:outputText value="#{utilisateurController.utilisateurInscre.apropos}" />
+                    <h:outputText class="fas fa-user-edit" value=" Options" />
+                    <h:link outcome="/profile/Edit" value="Editer vos données"/>
+                </p:panelGrid>
+            </div>
+            <div class="ui-g-8">
+                <p:panel id="reservations" header="5 derniéres réservations" footer="">
+                    <h:panelGrid columns="2">
+                        <p:dataTable var="reservation" value="#{utilisateurController.reservations}">
+                            <p:column headerText="Date reservation">
+                                <h:outputText value="#{utilisateurController.formatDate(reservation.dateReservation)}" />
+                            </p:column>
+
+                            <p:column headerText="Date début">
+                                <h:outputText value="#{utilisateurController.formatDate(reservation.dateDebut)}" />
+                            </p:column>
+
+                            <p:column headerText="Date Fin">
+                                <h:outputText value="#{utilisateurController.formatDate(reservation.dateFin)}" />
+                            </p:column>
+
+                            <p:column headerText="Etat">
+                                <h:outputText value="#{reservation.etat == 0? 'non valide':'valide'}" />
+                            </p:column>
+                            <p:column headerText="Operations">
+                                <!--                                <a href="#" style="text-decoration: none;"><i class="fas fa-print"></i> Imprimer
+                                                                    <p:printer target="" />
+                                                                </a><br/>-->
+                                
+                                <a href="#" style="text-decoration: none;" onclick="PF('dlg2#{reservation.id}').show();" type='button'><i class="fas fa-asterisk"></i> Details</a><br/>
+                                <a href="#" style="text-decoration: none;" type='button'><i class="fas fa-print"></i> Imprimer</a>
+                                <p:dialog header="RES#{reservation.id}" widgetVar="dlg2#{reservation.id}" minHeight="40">
+                                    <div class="col-md-12" style='overflow-y: auto;'>
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h5 class="badge badge-secondary">#{reservation.propriete.nom}</h5><br/>
+                                                <span class="badge badge-primary"><i class="fa fa-calendar"></i> Date réservation en: #{utilisateurController.formatDate(reservation.dateReservation)}</span><br/>
+                                                <span class="badge badge-primary"><i class="fa fa-calendar"></i> Date début en: #{utilisateurController.formatDate(reservation.dateDebut)}</span><br/>
+                                                <span class="badge badge-primary"><i class="fa fa-calendar"></i> Date de fin en: #{utilisateurController.formatDate(reservation.dateFin)}</span><br/>
+                                                <span class="badge badge-primary"><i class="fa fa-info"></i> #{reservation.nombreAdultes} adultes et #{reservation.nombreEnfants} enfants.</span><br/>
+                                                <span class="badge badge-primary"><i class="fa fa-question"></i> #{reservation.etat == 0? 'Reservation n\'est pas encore validé':'Reservation validé'}</span><br/>
+                                                <span class="badge badge-danger"><i class="fa fa-usd"></i> #{reservation.prixTotal} dhs.</span><br/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </p:dialog>
+                            </p:column>
+                        </p:dataTable>
+                    </h:panelGrid>
+                </p:panel>
+                <p:panel id="propriétés" header="Vos propriétés" footer="" style="margin-top: 10px;">
+                    <h:panelGrid columns="2">
+                        <p:dataTable var="propriete" value="#{utilisateurController.getProprietes()}">
+                            <p:column headerText="Nom">
+                                <h:outputText value="#{propriete.nom}" />
+                            </p:column>
+
+                            <p:column headerText="Prix">
+                                <h:outputText value="#{propriete.prix}" />
+                            </p:column>
+
+                            <p:column headerText="Valide">
+                                <h:outputText value="#{propriete.valide == false ? 'Non': 'Oui'}" />
+                            </p:column>
+
+                            <p:column headerText="Visible">
+                                <h:outputText value="#{propriete.visible == false ? 'Non':'Oui'}" />
+                            </p:column>
+                            <p:column headerText="Operations">
+                                <a href="#" style="text-decoration: none;" actionListener='#{utilisateurController.setPropriete(propriete)}' onclick="PF('dlg1#{propriete.id}').show();" type='button'><i class="fas fa-pencil-alt"></i> Details</a><br/>
+                                <p:dialog header="#{utilisateurController.propriete.nom}" widgetVar="dlg1#{propriete.id}" minHeight="40">
+                                    <div class="col-md-12" style='overflow-y: auto;'>
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h5 class="badge badge-secondary">#{propriete.nom}</h5><br/>
+                                                <span class="badge badge-primary"><i class="fa fa-location-arrow"></i> #{propriete.adresse}</span><br/>
+                                                <span class="badge badge-primary"><i class="fa fa-users"></i> #{propriete.maximumAdultes} adultes, et
+                                                    #{propriete.maximumEnfants} enfants.</span><br/>
+                                                <span class="badge badge-primary"><i class="fa fa-info"></i> #{propriete.nombreChambreACoucher} chambres à coucher,
+                                                    #{propriete.nombreSallons} sallons et #{propriete.nombreChambreDeBain} chambres de bain.</span><br/>
+                                                <span class="badge badge-primary"><i class="fa fa-phone"></i> #{propriete.telephone}</span><br/>
+                                                <span class="badge badge-primary"><i class="fa fa-envelope"></i> #{propriete.email} </span><br/>
+                                                <span class="badge badge-danger"><i class="fa fa-usd"></i> #{propriete.prix} dhs.</span><br/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </p:dialog>
+                            </p:column>
+                        </p:dataTable>
+                    </h:panelGrid>
+                </p:panel>
+            </div>
+        </div>
+    </h:body>
+</html>

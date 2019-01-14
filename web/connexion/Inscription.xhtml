@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>S'inscrire</title>
+        <link href="../resources/css/default.css" rel="stylesheet" type="text/css" />
+    </h:head>
+    <h:body style="height:500px;position:relative;background-image: url(https://www.plitvice-etnogarden.com/wp-content/uploads/2010/08/booking-background.jpg);
+            background-size: cover;">
+        <h:form style="position: absolute;
+                height: 180px;
+                top: 0;
+                bottom: 0;
+                left:35%;margin-left:-100px;
+                margin:auto;">
+
+            <p:growl id="growl" showDetail="true" sticky="true" />
+
+            <div  class="centerDiv" style="width: 400px;">
+                <p:panel>
+                    <f:facet name="header">S'inscrire</f:facet>
+                    <h:panelGrid columns="2">
+                        Nom:
+                        <p:inputText id="nom" value="#{utilisateurController.selected.nom}" title="Nom" />
+
+                        Prenom:
+                        <p:inputText id="prenom" value="#{utilisateurController.selected.prenom}" title="Prenom" />
+
+                        Email:
+                        <p:inputText id="email" value="#{utilisateurController.selected.email}" title="Email" />
+
+                        Mot de passe:
+                        <p:password id="motDePasse" value="#{utilisateurController.selected.motDePasse}" feedback="true" inline="true" />
+
+                        Nationalite:
+                        <p:selectOneMenu id="nationalite" value="#{utilisateurController.selected.nationalite}" style="width:125px">
+                            <f:selectItem itemLabel="Marocain" itemValue="Marocain" />
+                            <f:selectItem itemLabel="Francais" itemValue="Francais" />
+                            <f:selectItem itemLabel="Algerien" itemValue="Algerien" />
+                            <f:selectItem itemLabel="Espagnol" itemValue="Espagnol" />
+                        </p:selectOneMenu>
+                        <p:outputLabel value="NomUtilisateur:" for="nomUtilisateur" />
+                        <p:inputText id="nomUtilisateur" value="#{utilisateurController.selected.nomUtilisateur}" title="NomUtilisateur" />
+
+                        Genre:
+                        <p:selectOneButton value="#{utilisateurController.selected.genre}" id="genre">
+                            <f:selectItem itemLabel="Femme" itemValue="1" />
+                            <f:selectItem itemLabel="Homme" itemValue="2" />
+                        </p:selectOneButton>
+                        <p:commandButton action="#{utilisateurController.create()}" value="S'inscrire"  update="growl"/>
+                    </h:panelGrid>
+                    <div style='text-align: center'>
+                        Vous avez un compte ? <h:link outcome="/connexion/Connexion" value="S'authentifier"/>
+                    </div>
+                </p:panel>
+            </div>
+        </h:form>
+    </h:body>
+</html>
+

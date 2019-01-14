@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>Editer votre profil</title>
+        <link href="../resources/css/default.css" rel="stylesheet" type="text/css" />
+    </h:head>
+    <h:body style="background-image: url(http://silviahartmann.com/background-tile-art/images/grey-repeating-background-5.jpg);
+            background-repeat: repeat;">
+        <f:metadata>
+            <f:viewAction action="#{utilisateurController.checkLogin()}" />
+        </f:metadata>
+        <ui:include src="/profile/menu.xhtml" />
+        <h:form style="margin-left: 35%;;padding-top:30px;" enctype="multipart/form-data">
+            <p:growl id="growl" showDetail="true" sticky="true" />
+
+            <div  class="" style="width: 450px;">
+                <p:panel style="background-color: #eceae9;">
+                    <f:facet name="header">Editer votre profil</f:facet>
+                    <h:panelGrid columns="2">
+                        Image de profil:
+                        <p:fileUpload value="#{utilisateurController.file}" mode="simple" id="asset"/>
+                        Pays:
+                        <p:selectOneMenu id="pays" value="#{utilisateurController.payss}" class="mrg">
+                            <p:ajax listener="#{villeController.onCountryChanged(utilisateurController.payss)}" update="ville" />
+                            <f:selectItem itemLabel="Choisir un pays" itemValue="" noSelectionOption="true" />
+                            <f:selectItems value="#{paysController.items}"/>
+                        </p:selectOneMenu>
+                        Ville:
+                        <p:selectOneMenu id="ville" value="#{utilisateurController.ville}" >
+                            <f:selectItem itemLabel="Choisir une ville" itemValue="" noSelectionOption="true" />
+                            <f:selectItems value="#{villeController.items}"/>
+                        </p:selectOneMenu>
+                        Nom:
+                        <p:inputText id="nom" value="#{utilisateurController.utilisateurInscre.nom}" title="Nom" disabled="true"/>
+                        Prenom:
+                        <p:inputText id="prenom" value="#{utilisateurController.utilisateurInscre.prenom}" title="Prenom" disabled="true"/>
+                        Email:
+                        <p:inputText id="email" value="#{utilisateurController.utilisateurInscre.email}" title="Email" disabled="true"/>
+                        Nationalite:
+                        <p:selectOneMenu id="nationalite" value="#{utilisateurController.utilisateurInscre.nationalite}" style="width:125px" >
+                            <f:selectItem itemLabel="#{utilisateurController.utilisateurInscre.nationalite}" itemValue="#{null}" itemDisabled="true" />
+                            <f:selectItem itemLabel="Marocain" itemValue="Marocain" />
+                            <f:selectItem itemLabel="Francais" itemValue="Francais" />
+                            <f:selectItem itemLabel="Algerien" itemValue="Algerien" />
+                            <f:selectItem itemLabel="Espagnol" itemValue="Espagnol" />
+                        </p:selectOneMenu>
+                        Nom d'utilisateur:
+                        <p:inputText id="nomUtilisateur" value="#{utilisateurController.utilisateurInscre.nomUtilisateur}" disabled="true" title="NomUtilisateur" />
+                        Adresse:
+                        <p:inputTextarea id="adresse" rows="1" cols="50" value="#{utilisateurController.utilisateurInscre.adresse}" queryDelay="750" minQueryLength="4" />
+                        A propos:
+                        <p:inputTextarea id="apropos" rows="3" cols="50" value="#{utilisateurController.utilisateurInscre.apropos}" queryDelay="750" minQueryLength="4" />
+                        N° telephone:
+                        <p:inputText id="phone" value="#{utilisateurController.utilisateurInscre.phone}" title="Phone" />
+                        Date naissance:
+                        <p:calendar id="dateNaissance" value="#{utilisateurController.utilisateurInscre.dateNaissance}" />
+                        Genre:
+                        <p:outputLabel id="genre" value="#{utilisateurController.utilisateurInscre.genre==1?'femme':'homme'}"/>
+                        <p:commandButton  action="#{utilisateurController.edit()}" ajax="false"  value="Editer" icon="ui-icon-check"/>
+                    </h:panelGrid>
+                </p:panel>
+            </div>
+        </h:form>
+    </h:body>
+</html>

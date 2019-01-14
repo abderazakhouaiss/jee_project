@@ -1,0 +1,127 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>Ajouter une nouvelle propriété</title>
+        <link href="../resources/css/default.css" rel="stylesheet" type="text/css" />
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"/>
+        <script name="jquery/jquery.js" library="primefaces"></script>
+        <script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=false"></script>
+        <script type="text/javascript">
+            var currentMarker = null;
+
+            function handlePointClick(event) {
+                document.getElementById('form:coordonneeX').value = event.latLng.lat();
+                document.getElementById('form:coordonneeY').value = event.latLng.lng();
+                if (currentMarker !== null) {
+                    currentMarker.setMap(null);
+                    currentMarker = null;
+                }
+                currentMarker = new google.maps.Marker({
+                    position: new google.maps.LatLng(event.latLng.lat(), event.latLng.lng())
+                });
+                PF('map').addOverlay(currentMarker);
+            }
+        </script>
+        <style>
+            .panel{
+                min-height: 400px;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <f:metadata>
+            <f:viewAction action="#{utilisateurController.checkLogin()}" />
+        </f:metadata>
+        <ui:include src="/profile/menu.xhtml" />
+        <br/>
+        <h:form enctype="multipart/form-data" id="form">
+            <p:growl id="growl" sticky="true" showDetail="true"/>
+            <p:wizard>
+                <p:tab id="personal" title="Informations de base">
+                    <p:panel header="Informations de base" class="panel">
+                        <p:messages />
+                        <h:panelGrid columns="2" columnClasses="label, value">
+                            <p:outputLabel value="Pays:" for="pays" />
+                            <p:selectOneMenu id="pays" value="#{proprieteController.lePays}" class="form-control">
+                                <p:ajax listener="#{villeController.onCountryChanged(proprieteController.lePays)}" update="ville" />
+                                <f:selectItem itemLabel="Choisir un pays" itemValue="" noSelectionOption="true" />
+                                <f:selectItems value="#{paysController.items}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Ville:" for="ville" />
+                            <p:selectOneMenu id="ville" value="#{proprieteController.laVille}" class="form-control">
+                                <f:selectItem itemLabel="Choisir une ville" itemValue="" noSelectionOption="true" />
+                                <f:selectItems value="#{villeController.items}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Nom:" for="nom" />
+                            <p:inputText id="nom" value="#{proprieteController.selected.nom}" title="Nom" class="form-control"/>
+                            <p:outputLabel value="Apropos:" for="apropos" />
+                            <p:inputTextarea rows="3" cols="25" id="apropos" class="form-control" value="#{proprieteController.selected.apropos}" title="Apropos" />
+                            <p:outputLabel value="Telephone:" for="telephone" />
+                            <p:inputText id="telephone" class="form-control" value="#{proprieteController.selected.telephone}" title="Telephone" />
+                            <p:outputLabel value="Adresse:" for="adresse" />
+                            <p:inputTextarea rows="3" cols="25" class="form-control" id="adresse" value="#{proprieteController.selected.adresse}" title="Adresse" />
+                            <p:outputLabel value="Email:" for="email" />
+                            <p:inputText id="email" class="form-control" value="#{proprieteController.selected.email}" title="Email" />
+                        </h:panelGrid>
+                    </p:panel>
+                </p:tab>
+                <p:tab id="address" title="Coordonnées">
+                    <p:panel header="Coordonnées de villa" class="panel">
+                        <p:messages />
+                        <h:panelGrid columns="4" columnClasses="label, value">
+                            <p:outputLabel value="CoordonneeX:" for="coordonneeX" />
+                            <p:inputText id="coordonneeX" value="#{proprieteController.selected.coordonneeX}" title="CoordonneeX" />
+                            <p:outputLabel value="CoordonneeY:" for="coordonneeY" />
+                            <p:inputText id="coordonneeY" value="#{proprieteController.selected.coordonneeY}" title="CoordonneeY" />
+                        </h:panelGrid>
+                        <p:gmap id="gmap" center="31.6365079,-8.0236449" zoom="12" type="HYBRID" style="height:350px;width: 90%"
+                                onPointClick="handlePointClick(event);" widgetVar="map" />
+                    </p:panel>
+                </p:tab>
+                <p:tab id="contact" title="Réservation">
+                    <p:panel header="Contraintes de réservation" class="panel">
+                        <p:messages />
+                        <h:panelGrid columns="2" columnClasses="label, value">
+                            <p:outputLabel value="MaximumAdultes:" for="maximumAdultes" />
+                            <p:inputText id="maximumAdultes" value="#{proprieteController.selected.maximumAdultes}" title="MaximumAdultes" />
+                            <p:outputLabel value="MaximumEnfants:" for="maximumEnfants" />
+                            <p:inputText id="maximumEnfants" value="#{proprieteController.selected.maximumEnfants}" title="MaximumEnfants" />
+                            <p:outputLabel value="NombreSallons:" for="nombreSallons" />
+                            <p:inputText id="nombreSallons" value="#{proprieteController.selected.nombreSallons}" title="NombreSallons" />
+                            <p:outputLabel value="NombreChambreACoucher:" for="nombreChambreACoucher" />
+                            <p:inputText id="nombreChambreACoucher" value="#{proprieteController.selected.nombreChambreACoucher}" title="NombreChambreACoucher" />
+                            <p:outputLabel value="NombreChambreDeBain:" for="nombreChambreDeBain" />
+                            <p:inputText id="nombreChambreDeBain" value="#{proprieteController.selected.nombreChambreDeBain}" title="NombreChambreDeBain" />
+                            <p:outputLabel value="Fumme?" for="fumer" />
+                            <p:selectBooleanButton id="fumer" value="#{proprieteController.selected.fumee}" onLabel="Oui" offLabel="Non" />
+                            <p:outputLabel value="Prix:" for="prix" />
+                            <p:inputText id="prix" value="#{proprieteController.selected.prix}" title="Prix" />
+                        </h:panelGrid>
+                    </p:panel>
+                </p:tab>
+                <p:tab id="photos" title="Photos">
+                    <p:panel header="Ajouter la galerie de votre villa" class="panel">
+                        <h:panelGrid columns="1" >
+                            <p:outputLabel value="Image 1:" for="asset" />
+                            <p:fileUpload value="#{proprieteController.image1}" mode="simple" id="asset"/>
+                            <p:outputLabel value="Image 2:" for="asset1" />
+                            <p:fileUpload value="#{proprieteController.image2}" mode="simple" id="asset1"/>
+                            <p:outputLabel value="Image 3:" for="asset2" />
+                            <p:fileUpload value="#{proprieteController.image3}" mode="simple" id="asset2"/>
+                            <p:outputLabel value="Image 4:" for="asset3" />
+                            <p:fileUpload value="#{proprieteController.image4}" mode="simple" id="asset3"/>
+                        </h:panelGrid>
+                        Après l'importation des photos, veuillez vérifier vous données et confirmer l'ajout de villa.
+                    </p:panel>
+                    <p:commandButton value="Confirmer" action="#{proprieteController.add()}"  icon="ui-icon-play" style="float: right" ajax="false"/>
+                </p:tab>
+            </p:wizard>
+        </h:form>
+    </h:body>
+</html>
+

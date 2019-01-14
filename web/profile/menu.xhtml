@@ -1,0 +1,35 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+    <h:form>  
+        <p:growl id="messages"/>
+
+        <p:menubar>
+            <p:submenu label="Profil" >
+                <p:menuitem value="Editer" outcome="/profile/Edit" />
+                <p:separator />
+                <p:menuitem value="Accueil" outcome="/profile/Profile" />
+            </p:submenu>
+
+            <p:submenu label="Reservations">
+                <p:menuitem value="Reserver" outcome="/reservation/Proprietes"  />
+                <p:menuitem value="Voir Reservations" url="#" />
+            </p:submenu>
+
+            <p:submenu label="Etre propriétaire">
+                <p:menuitem value="Ajouter une villa" outcome="/propriete/Create" />
+                <p:menuitem value="Afficher les villas" url="#" />
+            </p:submenu>
+            <p:submenu label="Administration" style="display: #{utilisateurController.utilisateurInscre.role == 2?'none':'auto'}">
+                <p:menuitem value="Valider proprietes" outcome="/administration/ValidatePropriete"/>
+                <p:menuitem value="Valider réservations" outcome="/administration/ValidateReservation"/>
+                <p:menuitem value="Ajouter una pays" url="#"/>
+                <p:menuitem value="Ajouter une ville" url="#"/>
+            </p:submenu>
+            <p:menuitem value="Se déconnecter" action="#{utilisateurController.logOut()}" style="position: absolute;right:10px;" />
+        </p:menubar>
+    </h:form>
+</ui:composition>

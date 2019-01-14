@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>S'authentifier</title>
+        <link href="../resources/css/default.css" rel="stylesheet" type="text/css" />
+    </h:head>
+    <h:body style="height:500px;position:relative;background-image: url(https://www.plitvice-etnogarden.com/wp-content/uploads/2010/08/booking-background.jpg);
+            background-size: cover;">
+        <h:form style="position: absolute;
+                height: 100px;
+                top: 0;
+                bottom: 0;
+                left:38%;margin-left:-100px;
+                margin:auto;">
+
+            <p:growl id="growl" showDetail="true" sticky="true" />
+
+            <div  class="centerDiv" style="width: 400px">
+                <p:panel style="border: none; border-collapse: 0em;">
+                    <f:facet name="header">Login</f:facet>
+                    <h:panelGrid columns="2">
+                        Email:
+                        <h:inputText id="txLogin" value="#{utilisateurController.selected.email}" required="true" label="login"/>
+                        Mot de passe:
+                        <h:inputSecret id="txSenha" value="#{utilisateurController.selected.motDePasse}" required="true" label="Senha"/>
+                    </h:panelGrid>
+                    <p:commandButton value="login" action="#{utilisateurController.seConnecter()}" ajax="false"/>
+                    <div style='text-align: center'>
+                        <h:link outcome="/connexion/Inscription" value="Créer un compte"/>
+                    </div>
+                </p:panel>
+            </div>
+        </h:form>
+    </h:body>
+</html>
